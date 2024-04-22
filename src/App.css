@@ -1,15 +1,37 @@
 .App {
   text-align: center;
   min-height: 100vh;
+  display: flex;
 }
 
 .login-form {
-  margin-top: 20vh;
+  border: dashed 1px gray;
+  border-radius: 10px;
+  margin: auto;
+  padding: 30px;
+  box-shadow: 0 0 10px black;
 }
 
 .login-form label {
-  display: inline-block;
-  width: 100px;
-  text-align: right;
-  margin: 0 10px 10px;
+  text-align: left;
+  display: block;
+  margin: 0 10px;
+}
+
+.login-form input {
+  width: 300px;
+  height: 30px;
+  border-radius: 10px;
+  border: solid 1px gray;
+  padding: 0 10px;
+}
+
+.login-form input[type="submit"] {
+  background-color: green;
+  color: white;
+}
+
+.input-error {
+  color: red;
+  margin: 0 0 5px;
 }
