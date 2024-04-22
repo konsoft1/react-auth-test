@@ -1,77 +1,77 @@
-import React, {useState} from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import '../../App.css';
-import {BrowserRouter, Routes, Route, useNavigate} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 interface IUser {
-  name: string;
+  email: string;
   password: string;
 }
 
 interface IError {
-  nameError: string;
+  emailError: string;
   passwordError: string;
 }
 
 export default function Login() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
   const [user, setUser] = useState<IUser>({
-    name: "",
+    email: "",
     password: ""
   });
   const [error, setError] = useState<IError>({
-    nameError: "",
+    emailError: "",
     passwordError: ""
   });
 
   let login = (val: any) => {
     val.preventDefault();
 
-    let name = val.target.username.value;
+    let email = val.target.email.value;
     let password = val.target.password.value;
 
     let error = {
-      nameError: "",
+      emailError: "",
       passwordError: ""
     };
 
-    if (name == "")
-      error.nameError = "Name field is required.";
-    else if (!(new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(name)))
-      error.nameError = "Name should contain \"@\" letter.";
+    if (email == "")
+      error.emailError = "Email field is required.";
+    else if (!(new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(email)))
+      error.emailError = "Email should contain \"@\" letter.";
 
     if (password == "")
       error.passwordError = "Password field is required";
     else if (password.length < 4)
       error.passwordError = "Password should be more than 4 letters";
 
-    if (error.nameError != "" || error.passwordError != "") {
+    if (error.emailError != "" || error.passwordError != "") {
       setError(error);
       return;
     }
 
     setUser({
-      name: val.target.username.value,
-      password: val.target.username.value
+      email: email,
+      password: password
     });
 
-    navigate('/register')
+    alert("Logined successfully");
+    navigate('/register');
   }
 
   return (
-          <div className="App">
-          <form className='login-form' onSubmit={login}>
-            <label>Name</label>
-            <input type='text' name='username'/>
-            {error.nameError == ""? <br/> : <p className='input-error'>{error.nameError}</p>}
-            <label>Password</label>
-            <input type='password' name='password'/>
-            {error.passwordError == ""? <br/> : <p className='input-error'>{error.passwordError}</p>}
-            <input type='submit' value='Login'/>
-          </form>
-          {user.name == ""? '' : <p>Welcome, {user.name}!</p>}
-        </div>
+    <div className="App">
+      <form className='login-form' onSubmit={login}>
+        <label>Email</label>
+        <input type='text' name='email' />
+        {error.emailError == "" ? <br /> : <p className='input-error'>{error.emailError}</p>}
+        <label>Password</label>
+        <input type='password' name='password' />
+        {error.passwordError == "" ? <br /> : <p className='input-error'>{error.passwordError}</p>}
+        <input type='submit' value='Login' />
+        <p>If you don't have your own account, <Link to='/register'>Sign up</Link></p>
+      </form>
+    </div>
   );
 }

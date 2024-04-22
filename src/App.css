@@ -29,6 +29,7 @@
 .login-form input[type="submit"] {
   background-color: green;
   color: white;
+  margin-top: 20px;
 }
 
 .input-error {
