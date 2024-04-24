@@ -38,30 +38,30 @@ export default function Register() {
             confirmError: ""
         };
 
-        if (email == "")
+        if (email === "")
             error.emailError = "Email field is required.";
         else if (!(new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(email)))
             error.emailError = "Email should contain \"@\" letter.";
 
-        if (firstName == "")
+        if (firstName === "")
             error.firstNameError = "First Name field is required.";
         else if (!(new RegExp(/[a-zA-Z]+/).test(firstName)))
             error.firstNameError = "First Name should be letters.";
 
-        if (lastName == "")
+        if (lastName === "")
             error.lastNameError = "Last Name field is required.";
         else if (!(new RegExp(/[a-zA-Z]+/).test(lastName)))
             error.lastNameError = "Last Name should be letters.";
 
-        if (password == "")
+        if (password === "")
             error.passwordError = "Password field is required";
         else if (password.length < 4)
             error.passwordError = "Password should be more than 4 letters";
 
-        if (password != confirm)
+        if (password !== confirm)
             error.confirmError = "Confirm password correctly!";
 
-        if (error.emailError != "" || error.firstNameError != "" || error.lastNameError != "" || error.passwordError != "" || error.confirmError != "") {
+        if (error.emailError !== "" || error.firstNameError !== "" || error.lastNameError !== "" || error.passwordError !== "" || error.confirmError !== "") {
             setError(error);
             return;
         }
@@ -75,19 +75,19 @@ export default function Register() {
             <form className='login-form' onSubmit={register}>
                 <label>Email</label>
                 <input type='text' name='email' />
-                {error.emailError == "" ? <br /> : <p className='input-error'>{error.emailError}</p>}
+                {error.emailError === "" ? <br /> : <p className='input-error'>{error.emailError}</p>}
                 <label>First Name</label>
                 <input type='text' name='firstName' />
-                {error.firstNameError == "" ? <br /> : <p className='input-error'>{error.firstNameError}</p>}
+                {error.firstNameError === "" ? <br /> : <p className='input-error'>{error.firstNameError}</p>}
                 <label>Last Name</label>
                 <input type='text' name='lastName' />
-                {error.lastNameError == "" ? <br /> : <p className='input-error'>{error.lastNameError}</p>}
+                {error.lastNameError === "" ? <br /> : <p className='input-error'>{error.lastNameError}</p>}
                 <label>Password</label>
                 <input type='password' name='password' />
-                {error.passwordError == "" ? <br /> : <p className='input-error'>{error.passwordError}</p>}
+                {error.passwordError === "" ? <br /> : <p className='input-error'>{error.passwordError}</p>}
                 <label>Confirm Password</label>
                 <input type='password' name='confirm' />
-                {error.confirmError == "" ? <br /> : <p className='input-error'>{error.confirmError}</p>}
+                {error.confirmError === "" ? <br /> : <p className='input-error'>{error.confirmError}</p>}
                 <input type='submit' value='Register' />
                 <p>If you already have your own account, <Link to='/'>Log in</Link></p>
             </form>
