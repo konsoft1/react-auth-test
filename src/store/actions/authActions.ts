@@ -34,15 +34,15 @@ export const login = async (email: string, password: string) => {
     }
 
     try {
-        //let data = await (await fetch('ServerURL', requestOptions)).json();
-        let data: any = {
-            user: {
-                id: 'fake-id',
-                username: 'jonathan',
-                email: 'jonathan940108@outlook.com'
-            },
-            token: 'fake-token'
-        }
+        let data = await (await fetch('http://localhost:3001', requestOptions)).json();
+        // let data: any = {
+        //     user: {
+        //         id: 'fake-id',
+        //         username: 'jonathan',
+        //         email: 'jonathan940108@outlook.com'
+        //     },
+        //     token: 'fake-token'
+        // }
 
         if (data.user) {
             return loginSuccess(data.user, data.token);
