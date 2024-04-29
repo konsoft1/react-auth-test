@@ -1,11 +1,9 @@
 import React, { useState, useRef } from 'react';
 import '../../App.css';
 import { useNavigate, Link } from "react-router-dom";
-
-interface IUser {
-  email: string;
-  password: string;
-}
+import { useAuthContext } from '../../store/contexts/AuthContext';
+import { login, requestLogin } from '../../store/actions/authActions';
+import { LOGIN_SUCCESS } from '../../store/contexts/actionTypes';
 
 interface IError {
   emailError: string;
@@ -13,20 +11,18 @@ interface IError {
 }
 
 export default function Login() {
-  const navigate = useNavigate();
+  const {authState, authDispatch} = useAuthContext()
 
-  const txtEmail = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate()
 
-  const [user, setUser] = useState<IUser>({
-    email: "",
-    password: ""
-  });
+  const txtEmail = useRef<HTMLInputElement | null>(null)
+
   const [error, setError] = useState<IError>({
     emailError: "",
     passwordError: ""
-  });
+  })
 
-  let login = (e: any) => {
+  let handleLogin = async (e: any) => {
     e.preventDefault();
 
     let email = txtEmail.current?.value || '';
@@ -52,18 +48,18 @@ export default function Login() {
       return;
     }
 
-    setUser({
-      email: email,
-      password: password
-    });
-
-    alert("Logined successfully");
-    navigate('/register');
+    authDispatch(requestLogin());
+    const action = await login(email, password);
+    authDispatch(action);
+    
+    if(action.type === LOGIN_SUCCESS) {
+      navigate('/dashboard');
+    }
   }
 
   return (
     <div className="App">
-      <form className='login-form' onSubmit={login}>
+      <form className='login-form' onSubmit={handleLogin}>
         <label>Email</label>
         <input ref={txtEmail} type='text' />
         {error.emailError === "" ? <br /> : <p className='input-error'>{error.emailError}</p>}
