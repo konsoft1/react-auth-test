@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import '../../App.css';
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from 'react'
+import '../../App.css'
+import { useNavigate, Link } from "react-router-dom"
+import { useAuthContext } from '../../store/contexts/AuthContext'
+import { register, requestRegister } from '../../store/actions/authActions'
 
 interface IError {
-    emailError: string;
-    firstNameError: string;
-    lastNameError: string;
-    passwordError: string;
-    confirmError: string;
+    emailError: string
+    firstNameError: string
+    lastNameError: string
+    passwordError: string
+    confirmError: string
 }
 
 export default function Register() {
-    const navigate = useNavigate();
+    const {authState, authDispatch} = useAuthContext()
+
+    const navigate = useNavigate()
 
     const [error, setError] = useState<IError>({
         emailError: "",
@@ -19,16 +23,16 @@ export default function Register() {
         lastNameError: "",
         passwordError: "",
         confirmError: ""
-    });
+    })
 
-    let register = (val: any) => {
-        val.preventDefault();
+    let hadnleRegister = async (val: any) => {
+        val.preventDefault()
 
-        let email = val.target.email.value;
-        let firstName = val.target.firstName.value;
-        let lastName = val.target.lastName.value;
-        let password = val.target.password.value;
-        let confirm = val.target.confirm.value;
+        let email = val.target.email.value
+        let firstName = val.target.firstName.value
+        let lastName = val.target.lastName.value
+        let password = val.target.password.value
+        let confirm = val.target.confirm.value
 
         let error = {
             emailError: "",
@@ -36,43 +40,50 @@ export default function Register() {
             lastNameError: "",
             passwordError: "",
             confirmError: ""
-        };
-
-        if (email === "")
-            error.emailError = "Email field is required.";
-        else if (!(new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(email)))
-            error.emailError = "Email should contain \"@\" letter.";
-
-        if (firstName === "")
-            error.firstNameError = "First Name field is required.";
-        else if (!(new RegExp(/[a-zA-Z]+/).test(firstName)))
-            error.firstNameError = "First Name should be letters.";
-
-        if (lastName === "")
-            error.lastNameError = "Last Name field is required.";
-        else if (!(new RegExp(/[a-zA-Z]+/).test(lastName)))
-            error.lastNameError = "Last Name should be letters.";
-
-        if (password === "")
-            error.passwordError = "Password field is required";
-        else if (password.length < 4)
-            error.passwordError = "Password should be more than 4 letters";
-
-        if (password !== confirm)
-            error.confirmError = "Confirm password correctly!";
-
-        if (error.emailError !== "" || error.firstNameError !== "" || error.lastNameError !== "" || error.passwordError !== "" || error.confirmError !== "") {
-            setError(error);
-            return;
         }
 
-        alert('Registered successfully!');
-        navigate('/');
+        if (email === "")
+            error.emailError = "Email field is required."
+        else if (!(new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(email)))
+            error.emailError = "Email should contain \"@\" letter."
+
+        if (firstName === "")
+            error.firstNameError = "First Name field is required."
+        else if (!(new RegExp(/[a-zA-Z]+/).test(firstName)))
+            error.firstNameError = "First Name should be letters."
+
+        if (lastName === "")
+            error.lastNameError = "Last Name field is required."
+        else if (!(new RegExp(/[a-zA-Z]+/).test(lastName)))
+            error.lastNameError = "Last Name should be letters."
+
+        if (password === "")
+            error.passwordError = "Password field is required"
+        else if (password.length < 4)
+            error.passwordError = "Password should be more than 4 letters"
+
+        if (password !== confirm)
+            error.confirmError = "Confirm password correctly!"
+
+        if (error.emailError !== "" || error.firstNameError !== "" || error.lastNameError !== "" || error.passwordError !== "" || error.confirmError !== "") {
+            setError(error)
+            return
+        }
+
+        authDispatch(requestRegister())
+        const action = await register({
+            email,
+            firstName,
+            lastName
+        }, password)
+
+        alert('Registered successfully!')
+        navigate('/')
     }
 
     return (
         <div className="App">
-            <form className='login-form' onSubmit={register}>
+            <form className='login-form' onSubmit={hadnleRegister}>
                 <label>Email</label>
                 <input type='text' name='email' />
                 {error.emailError === "" ? <br /> : <p className='input-error'>{error.emailError}</p>}

@@ -7,8 +7,9 @@ export type AuthState = {
 }
 
 export type User = {
-    id: string
-    username: string
+    id?: string
+    firstName: string
+    lastName: string
     email: string
 }
 
