@@ -3,30 +3,21 @@ import { User } from "../../store/contexts/types"
 import styles from './index.module.scss';
 import { useAppDispatch, useAppSelector } from "../../hook/store";
 import { logout } from "../../store/reducers/authSlice";
+import { useGetProfileQuery } from "../../hook/apiServices";
 
 export const Dashboard = () => {
     const authState = useAppSelector((state) => state.auth)
     const authDispatch = useAppDispatch()
     const user: User | null = authState.user;
 
-    const [profile, setProfile] = useState('');
-
-    useEffect(() => {
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authState.token}`
-            }
-        }
-        fetch('http://localhost:3001/profile', requestOptions)
-            .then(async response => {
-                setProfile(await response.text())
-            })
-    }, [profile])
+    const { data, error, isLoading, refetch } = useGetProfileQuery(authState.token)
 
     const handleLogout = () => {
         authDispatch(logout())
+    }
+
+    const handleReloadProfile = () => {
+        refetch()
     }
 
     return (
@@ -38,8 +29,15 @@ export const Dashboard = () => {
                 Logout
             </button>
             <p className={styles.profile}>
-                {profile}
+                {
+                    error ? 'Oh, error!'
+                    : isLoading ? 'Loading...'
+                    : JSON.stringify(data)
+                }
             </p>
+            <button onClick={handleReloadProfile}>
+                Reload Profile
+            </button>
         </div>
     )
 }
