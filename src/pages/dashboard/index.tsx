@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { logout } from "../../store/actions/authActions";
 import { User } from "../../store/contexts/types"
 import styles from './index.module.scss';
 import { useAppDispatch, useAppSelector } from "../../hook/store";
+import { logout } from "../../store/reducers/authSlice";
 
 export const Dashboard = () => {
     const authState = useAppSelector((state) => state.auth)

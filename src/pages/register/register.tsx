@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import '../../App.css'
 import { useNavigate, Link } from "react-router-dom"
-import { register, requestRegister } from '../../store/actions/authActions'
 import { useAppDispatch, useAppSelector } from '../../hook/store'
+import { register } from '../../store/reducers/authSlice'
 
 interface IError {
     emailError: string
@@ -71,15 +71,20 @@ export default function Register() {
             return
         }
 
-        authDispatch(requestRegister())
-        const action = await register({
+        const user = {
             email,
             firstName,
             lastName
-        }, password)
-
-        alert('Registered successfully!')
-        navigate('/')
+        }
+        authDispatch(register({user, password}))
+            .unwrap()
+            .then(() => {
+                alert('Registered successfully!')
+                navigate('/')
+            })
+            .catch((error: any) => {
+                console.log('Register failed: ', `${error}`)
+            })
     }
 
     return (

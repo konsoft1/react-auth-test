@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react';
 import '../../App.css';
 import { useNavigate, Link } from "react-router-dom";
-import { login, requestLogin } from '../../store/actions/authActions';
-import { LOGIN_SUCCESS } from '../../store/contexts/actionTypes';
 import { useAppDispatch, useAppSelector } from '../../hook/store';
+import { login } from '../../store/reducers/authSlice';
 
 interface IError {
   emailError: string;
@@ -49,13 +48,14 @@ export default function Login() {
       return;
     }
 
-    authDispatch(requestLogin());
-    const action = await login(email, password);
-    authDispatch(action);
-    
-    if(action.type === LOGIN_SUCCESS) {
-      navigate('/dashboard');
-    }
+    authDispatch(login({email, password}))
+      .unwrap()
+      .then(() => {
+        navigate('/dashboard')
+      })
+      .catch((error: any) => {
+        console.log('Login failed: ', `${error}`)
+      })
   }
 
   return (
