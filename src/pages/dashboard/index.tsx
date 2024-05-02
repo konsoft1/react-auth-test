@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { logout } from "../../store/actions/authActions";
-import { useAuthContext } from "../../store/contexts/AuthContext"
 import { User } from "../../store/contexts/types"
 import styles from './index.module.scss';
+import { useAppDispatch, useAppSelector } from "../../hook/store";
 
 export const Dashboard = () => {
-    const { authState, authDispatch } = useAuthContext();
-    const user: User = authState.user;
+    const authState = useAppSelector((state) => state.auth)
+    const authDispatch = useAppDispatch()
+    const user: User | null = authState.user;
 
     const [profile, setProfile] = useState('');
 
@@ -31,7 +32,7 @@ export const Dashboard = () => {
     return (
         <div className={styles.container}>
             <p className={styles.title}>
-                Welcome, {user.firstName} {user.lastName}!
+                Welcome, {user?.firstName} {user?.lastName}!
             </p>
             <button onClick={handleLogout}>
                 Logout

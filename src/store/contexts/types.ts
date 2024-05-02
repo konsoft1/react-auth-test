@@ -12,8 +12,3 @@ export type User = {
     lastName: string
     email: string
 }
-
-export type AuthAction = {
-    type: string
-    payload: any
-}

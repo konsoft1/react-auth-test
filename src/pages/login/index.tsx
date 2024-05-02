@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import '../../App.css';
 import { useNavigate, Link } from "react-router-dom";
-import { useAuthContext } from '../../store/contexts/AuthContext';
 import { login, requestLogin } from '../../store/actions/authActions';
 import { LOGIN_SUCCESS } from '../../store/contexts/actionTypes';
+import { useAppDispatch, useAppSelector } from '../../hook/store';
 
 interface IError {
   emailError: string;
@@ -11,7 +11,8 @@ interface IError {
 }
 
 export default function Login() {
-  const {authState, authDispatch} = useAuthContext()
+  const authState = useAppSelector((state) => state.auth)
+  const authDispatch = useAppDispatch()
 
   const navigate = useNavigate()
 
