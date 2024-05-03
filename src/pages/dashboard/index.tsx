@@ -10,7 +10,7 @@ export const Dashboard = () => {
     const authDispatch = useAppDispatch()
     const user: User | null = authState.user;
 
-    const { data, error, isLoading, refetch } = useGetProfileQuery(authState.token)
+    const { data, error, isLoading, refetch } = useGetProfileQuery(localStorage.getItem('token'))
 
     const handleLogout = () => {
         authDispatch(logout())

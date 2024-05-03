@@ -2,7 +2,6 @@ export type AuthState = {
     isAuthenticated: boolean
     loading: boolean
     user: User | null
-    token: string
     error: string
 }
 

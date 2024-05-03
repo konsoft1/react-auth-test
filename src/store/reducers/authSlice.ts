@@ -6,7 +6,6 @@ const initialState: AuthState = {
     isAuthenticated: false,
     loading: false,
     user: null,
-    token: "",
     error: ""
 }
 
@@ -24,9 +23,11 @@ export const login = createAsyncThunk(
 
         try {
             const response = await fetch('http://localhost:3001/auth/login', requestOptions)
+            const data = await (response).json();
             if (response.status !== 200)
-                return rejectWithValue(`${(await (response).json()).message}`)
-            return await (response).json();
+                return rejectWithValue(`${data.message}`)
+            localStorage.setItem('token', data.token);
+            return data
         } catch(error) {
             return rejectWithValue(`${error}`)
         }
@@ -63,7 +64,7 @@ export const authSlice = createSlice({
         logout: (state) => {
             state.isAuthenticated = false
             state.user = null
-            state.token = ""
+            localStorage.removeItem('token')
         }
     },
     extraReducers: (builder) => {
@@ -75,14 +76,12 @@ export const authSlice = createSlice({
                 state.isAuthenticated = true
                 state.loading = false
                 state.user = jwtDecode<{user: User}>(action.payload.token).user
-                state.token = action.payload.token
                 console.log(JSON.stringify(action))
             })
             .addCase(login.rejected, (state) => {
                 state.isAuthenticated = false
                 state.loading = false
                 state.user = null
-                state.token = ""
             })
             .addCase(register.pending, (state) => {
                 state.loading = true
